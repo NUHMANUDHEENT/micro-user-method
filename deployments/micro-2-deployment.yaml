@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-2-deployment
+  labels:
+    app: micro-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-2
+  template:
+    metadata:
+      labels:
+        app: micro-2
+    spec:
+      containers:
+        - name: micro-2
+          image: nuhman9260/micro-2:latest
+          ports:
+            - containerPort: 8081
+          env:
+          - name: USER_GRPC_SERVER
+            valueFrom:
+              secretKeyRef:
+                name: micro-secret
+                key: USER_GRPC_SERVER
+          - name: REDIS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: micro-secret
+                key: REDIS_PORT
+
+          - name: PORT
+            valueFrom:
+              secretKeyRef:
+                name: micro-secret
+                key: PORT
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-2-service
+spec:
+  selector:
+    app: micro-2
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer

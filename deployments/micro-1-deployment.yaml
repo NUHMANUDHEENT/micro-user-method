@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-1-deployment
+  labels:
+    app: micro-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-1
+  template:
+    metadata:
+      labels:
+        app: micro-1
+    spec:
+      containers:
+        - name: micro-1
+          image: nuhman9260/micro-1:latest
+          ports:
+            - containerPort: 50060
+          env:
+          - name: PSQL_URL
+            valueFrom:
+              secretKeyRef:
+                name: micro-secret
+                key: PSQL_URL
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-1-service
+spec:
+  selector:
+    app: micro-1
+  ports:
+    - protocol: TCP
+      port: 50060
+      targetPort: 50060
+  type: ClusterIP
