@@ -154,7 +154,8 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		log.Println("User data fetch from Redis")
 
 		c.JSON(http.StatusOK, gin.H{
-			"userdata": userdata,
+			"userdata":  userdata,
+			"fetch_from": "Redis",
 		})
 		return
 	}
@@ -186,6 +187,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	log.Println("User data fetch from Database")
 	c.JSON(http.StatusOK, gin.H{
 		"userdata": userData,
+		"fetch_from": "Database",
 	})
 }
 func (h *UserHandler) ListUserNames(c *gin.Context) {
