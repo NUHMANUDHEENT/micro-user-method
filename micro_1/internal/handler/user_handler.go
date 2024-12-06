@@ -7,7 +7,6 @@ import (
 	"golang-application/internal/model"
 	"golang-application/internal/repo"
 	userpb "golang-application/proto"
-	"time"
 )
 
 type UserServiceClient struct {
@@ -126,7 +125,5 @@ func (h *UserServiceClient) ListUserNames(ctx context.Context, req *userpb.ListU
 		return nil, errors.New("invalid method")
 
 	}
-	time.Sleep(time.Duration(req.WaitTime) * time.Second)
-
 	return &userpb.ListUserNamesResponse{Names: resp}, nil
 }

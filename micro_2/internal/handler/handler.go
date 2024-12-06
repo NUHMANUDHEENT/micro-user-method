@@ -21,7 +21,7 @@ type UserHandler struct {
 	wg          sync.WaitGroup
 }
 
-// NewUserHandler initializes a new UserHandler with the provided service.
+
 func NewUserHandler(userService service.UserService) *UserHandler {
 	return &UserHandler{
 		userService: userService,
@@ -206,24 +206,3 @@ func (h *UserHandler) ListUserNames(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"names": resp})
 }
-
-// func (h *UserHandler) ListUserNames2(c *gin.Context) {
-// 	var req struct {
-// 		Method   int `json:"method"`
-// 		WaitTime int `json:"wait_time"`
-// 	}
-// 	if err := c.ShouldBindJSON(&req); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	ctx, cancel := context.WithCancel(context.Background())
-// 	defer cancel()
-
-// 	resp, err := h.userService.ListUserNames(ctx, req.Method, req.WaitTime)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"names": resp})
-// }

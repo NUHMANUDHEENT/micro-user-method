@@ -100,17 +100,16 @@ func (s *userService) GetUser(ctx context.Context, id int64) (models.User, error
 func (s *userService) ListUserNames(ctx context.Context, method, waitTime int) ([]string, error) {
 	switch method {
 	case 1:
-		log.Printf("Request from method 1 for %d second waitTime", waitTime)
-
-		
-		select {
-		case <-time.After(time.Duration(waitTime) * time.Second): 
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		}
 
 		s.Mutx.Lock()
 		defer s.Mutx.Unlock()
+		log.Printf("Request from method 1 for %d second waitTime", waitTime)
+
+		select {
+		case <-time.After(time.Duration(waitTime) * time.Second):
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		}
 
 		res, err := s.UserClient.ListUserNames(ctx, &userpb.ListUserNamesRequest{
 			Method:   int32(method),
@@ -139,14 +138,12 @@ func (s *userService) ListUserNames(ctx context.Context, method, waitTime int) (
 			resultCh <- res
 		}()
 
-		// Deliberately wait for the given time
 		select {
-		case <-time.After(time.Duration(waitTime) * time.Second): // Wait for specified seconds
-		case <-ctx.Done(): // Handle cancellations
+		case <-time.After(time.Duration(waitTime) * time.Second):
+		case <-ctx.Done():
 			return nil, ctx.Err()
 		}
 
-		// Process the response
 		select {
 		case res := <-resultCh:
 			return res.Names, nil
