@@ -1,0 +1,57 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  micro_1:
+    build:
+      context: ./micro_1
+      dockerfile: Dockerfile
+    container_name: micro_1
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+    command: ["go", "run", "main.go"]
+
+  micro_2:
+    build:
+      context: ./micro_2
+      dockerfile: Dockerfile
+    container_name: micro_2
+    depends_on:
+      - micro_1
+    environment:
+      GRPC_HOST: micro_1
+      GRPC_PORT: 50051
+    ports:
+      - "50060:50060"
+    command: ["go", "run", "main.go"]
+
+volumes:
+  postgres_data:
