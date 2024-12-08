@@ -1,7 +1,3 @@
-Here’s the updated and formatted **README.md** file, including instructions for using Docker Compose, API routes, and details on testing the microservices:
-
----
-
 # **Microservices with Go: User Management and Method Handling**
 
 ## **Overview**
