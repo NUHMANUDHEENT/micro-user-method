@@ -46,7 +46,7 @@ docker-compose up --build
 ```
 
 This will start the following services:  
-- **Microservice 1**: `http://localhost:8080`  
+- **Microservice 1**: `http://localhost:8080`  HTTP port
 - **Microservice 2**: `http://localhost:50060` Grpc port 
 - **PostgreSQL**: Running on `localhost:5432`  
 - **Redis**: Running on `localhost:6379`
@@ -91,7 +91,7 @@ The Method Execution microservice supports the following operations:
      {
        "name": "John Doe",
        "email": "john.doe@example.com",
-       "age": 30
+       "phone":985940495
      }
      ```
 
@@ -122,7 +122,7 @@ The Method Execution microservice supports the following operations:
      ```json
      {
        "method": 1,
-       "waitTime": 5000
+       "waitTime": 10
      }
      ```
    - Methods:
